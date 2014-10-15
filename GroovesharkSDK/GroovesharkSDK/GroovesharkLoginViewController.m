@@ -32,8 +32,6 @@
 
 #import "GroovesharkLoginViewController.h"
 
-#define CALLBACK_URI @"http://grooveshark.sdk/success"
-
 @interface GroovesharkLoginViewController () <UIWebViewDelegate>
 
 @property (nonatomic, strong) UIWebView *webView;
@@ -47,22 +45,24 @@
     return [super init];
 }
 
-- (id)initWithSession:(GroovesharkSession *)session
+- (id)initWithSession:(GroovesharkSession *)session callbackUrl:(NSURL *)callbackUrl
 {
     self = [self init];
     if (self)
     {
         self.session = session;
+        self.callbackUrl = callbackUrl;
     }
     return self;
 }
 
-- (id)initWithSession:(GroovesharkSession *)session delegate:(id<GroovesharkLoginViewControllerDelegate>)delegate
+- (id)initWithSession:(GroovesharkSession *)session callbackUrl:(NSURL *)callbackUrl delegate:(id<GroovesharkLoginViewControllerDelegate>)delegate
 {
     self = [self init];
     if (self)
     {
         self.session = session;
+        self.callbackUrl = callbackUrl;
         self.delegate = delegate;
     }
     return self;
@@ -82,7 +82,7 @@
     NSMutableString *urlString = [@"https://auth.grooveshark.com/?app=" mutableCopy];
     [urlString appendString:[self.session.key stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     [urlString appendString:@"&callback="];
-    [urlString appendString:[CALLBACK_URI stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    [urlString appendString:[self.callbackUrl.absoluteString stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     [_webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:urlString]]];
 }
 
@@ -91,7 +91,7 @@
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     NSURL *url = request.URL;
-    if ([url.absoluteString hasPrefix:CALLBACK_URI])
+    if ([url.absoluteString hasPrefix:self.callbackUrl.absoluteString])
     {
         NSMutableDictionary *queryParams = [[NSMutableDictionary alloc] init];
         for (NSString *pair in [url.query componentsSeparatedByString:@"&"])

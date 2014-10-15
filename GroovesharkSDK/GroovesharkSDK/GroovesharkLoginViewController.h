@@ -40,11 +40,12 @@
 @interface GroovesharkLoginViewController : UIViewController
 
 @property (nonatomic, strong) GroovesharkSession *session;
+@property (nonatomic, strong) NSURL *callbackUrl;
 @property (nonatomic, weak) id<GroovesharkLoginViewControllerDelegate> delegate;
 
 - (id)init;
-- (id)initWithSession:(GroovesharkSession *)session;
-- (id)initWithSession:(GroovesharkSession *)session delegate:(id<GroovesharkLoginViewControllerDelegate>)delegate;
+- (id)initWithSession:(GroovesharkSession *)session callbackUrl:(NSURL *)callbackUrl;
+- (id)initWithSession:(GroovesharkSession *)session callbackUrl:(NSURL *)callbackUrl delegate:(id<GroovesharkLoginViewControllerDelegate>)delegate;
 
 @end
 
