@@ -74,9 +74,10 @@
     
     self.webView = [[UIWebView alloc] init];
     _webView.delegate = self;
+    _webView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:_webView];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-(webView)-|" options:0 metrics:nil views:@{@"webView": _webView}]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(webView)-|" options:0 metrics:nil views:@{@"webView": _webView}]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[webView]-0-|" options:0 metrics:nil views:@{@"webView": _webView}]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[webView]-0-|" options:0 metrics:nil views:@{@"webView": _webView}]];
     
     NSMutableString *urlString = [@"https://auth.grooveshark.com/?app=" mutableCopy];
     [urlString appendString:[self.session.key stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
