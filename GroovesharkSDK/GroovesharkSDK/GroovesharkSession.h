@@ -325,6 +325,25 @@
                           limit:(NSInteger)limit
                      completion:(void (^)(NSArray *playlists, NSError *error))completion;
 
+/** Fetch the songs in the specified playlist.
+ Each song returned is an instance of GroovesharkSongInfo.
+ @param playlistID ID of the playlist.
+ @param limit Limit the results size. Specify 0 for no limit.
+ @param completion Block to be called on completion
+ */
+- (void)getPlaylistSongsForPlaylist:(int64_t)playlistID
+                              limit:(NSInteger)limit
+                         completion:(void (^)(NSArray *songs, NSError *error))completion;
+
+/** Set the songs in the specified playlist.
+ @param songIDs Array of songIDs.
+ @param playlistID ID of the playlist.
+ @param completion Block to be called on completion
+ */
+- (void)setPlaylistSongs:(NSArray *)songIDs
+             forPlaylist:(int64_t)playlistID
+              completion:(void (^)(NSError *error))completion;
+
 #pragma mark - Streaming
 
 /** Request a stream URL for a specific SongID

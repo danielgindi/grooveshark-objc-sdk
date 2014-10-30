@@ -796,6 +796,55 @@ static GroovesharkSession *s_session = nil;
     }];
 }
 
+- (void)getPlaylistSongsForPlaylist:(int64_t)playlistID
+                              limit:(NSInteger)limit
+                         completion:(void (^)(NSArray *songs, NSError *error))completion
+{
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    parameters[@"playlistID"] = @(playlistID);
+    if (limit)
+    {
+        parameters[@"limit"] = @(limit);
+    }
+    
+    [self callApiFunction:@"getPlaylistSongs" withParameters:parameters https:NO completion:^(id result, NSError *error) {
+        
+        if (completion)
+        {
+            NSMutableArray *songs = nil;
+            if (!error && result && result[@"songs"])
+            {
+                songs = [[NSMutableArray alloc] init];
+                for (NSDictionary *info in result[@"songs"])
+                {
+                    [songs addObject:[GroovesharkSongInfo songInfoWithValuesInDictionary:info]];
+                }
+            }
+            
+            completion(songs, error);
+        }
+        
+    }];
+}
+
+- (void)setPlaylistSongs:(NSArray *)songIDs
+             forPlaylist:(int64_t)playlistID
+              completion:(void (^)(NSError *error))completion
+{
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+    parameters[@"playlistID"] = @(playlistID);
+    parameters[@"songIDs"] = songIDs;
+    
+    [self callApiFunction:@"setPlaylistSongs" withParameters:parameters https:NO completion:^(id result, NSError *error) {
+        
+        if (completion)
+        {
+            completion(error);
+        }
+        
+    }];
+}
+
 #pragma mark - Streaming
 
 - (void)getStreamURLForSongID:(int64_t)songID
